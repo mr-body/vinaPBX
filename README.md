@@ -1,242 +1,126 @@
-Welcome to your new TanStack Start app! 
+# vinaPBX
 
-# Getting Started
+Plataforma PBX moderna e de código aberto para gerenciamento de comunicações VoIP, oferecendo suporte a SIP, ramais, roteamento de chamadas, IVR, filas e administração em tempo real.
 
-To run this application:
+## Visão geral
+
+O **vinaPBX** é um projeto focado em entregar uma central telefônica IP moderna, flexível e acessível. A proposta é simplificar a operação de ambientes de comunicação empresarial com recursos típicos de PBX, combinando uma interface web moderna com backend escalável.
+
+A plataforma foi pensada para atender desde pequenos ambientes até operações com maior volume de chamadas, mantendo uma base aberta para evolução contínua pela comunidade.
+
+## Principais funcionalidades
+
+- ✅ Gerenciamento de contas SIP
+- ✅ Criação e administração de ramais
+- ✅ Roteamento inteligente de chamadas
+- ✅ URA/IVR (Unidade de Resposta Audível)
+- ✅ Filas de atendimento
+- ✅ Painel de administração em tempo real
+- ✅ Estrutura orientada a APIs para integrações
+
+## Stack e composição do projeto
+
+Com base na composição atual do repositório:
+
+- **TypeScript (~93,7%)**: base principal da aplicação
+- **CSS (~3,7%)**: estilização da interface
+- **MDX (~2,6%)**: documentação e conteúdo técnico
+
+## Arquitetura (alto nível)
+
+Embora a estrutura possa evoluir, a proposta do projeto é organizada em camadas:
+
+1. **Interface Web/Admin**
+   - Gestão operacional de telefonia
+   - Configurações de ramais, rotas, filas e IVR
+
+2. **Camada de aplicação (API/serviços)**
+   - Regras de negócio da PBX
+   - Orquestração de chamadas e entidades de comunicação
+
+3. **Integrações de telefonia**
+   - Interoperabilidade SIP
+   - Conexão com infraestrutura VoIP/operadoras
+
+## Casos de uso comuns
+
+- Configurar ramais para equipes internas
+- Criar fluxos de atendimento com IVR
+- Direcionar chamadas por horário, fila ou departamento
+- Monitorar operação de atendimento em tempo real
+- Integrar recursos de telefonia com sistemas internos
+
+## Como começar
+
+> **Observação:** esta seção pode variar conforme a estrutura atual do repositório (monorepo, frontend/backend separados, etc.).
+
+### 1) Pré-requisitos
+
+- Node.js (versão LTS recomendada)
+- npm, yarn ou pnpm
+- Ambiente SIP/VoIP para testes (opcional, dependendo do escopo)
+
+### 2) Instalação
 
 ```bash
+# clone o repositório
+git clone https://github.com/mr-body/vinaPBX.git
+
+# acesse a pasta
+cd vinaPBX
+
+# instale as dependências
 npm install
+```
+
+### 3) Execução local
+
+```bash
 npm run dev
 ```
 
-# Building For Production
-
-To build this application for production:
+### 4) Build para produção
 
 ```bash
 npm run build
+npm run start
 ```
 
-## Testing
+> Se o projeto usar scripts diferentes, ajuste os comandos acima de acordo com o `package.json`.
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+## Estrutura sugerida de configuração
 
-```bash
-npm run test
+Crie um arquivo `.env` com as variáveis necessárias para o ambiente local (ex.: portas, endpoints de serviços, credenciais SIP de homologação, etc.).
+
+Exemplo genérico:
+
+```env
+NODE_ENV=development
+PORT=3000
+API_URL=http://localhost:3000
 ```
 
-## Styling
+## Boas práticas de contribuição
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+Contribuições são bem-vindas! Para colaborar:
 
-### Removing Tailwind CSS
+1. Faça um fork do repositório
+2. Crie uma branch para sua feature/correção
+3. Abra um Pull Request com descrição clara
+4. Inclua contexto técnico e evidências de teste
 
-If you prefer not to use Tailwind CSS:
+## Roadmap (proposta)
 
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `npm install @tailwindcss/vite tailwindcss -D`
+- [ ] Melhorias de observabilidade e métricas de chamadas
+- [ ] Templates avançados de IVR
+- [ ] Regras de roteamento por SLA
+- [ ] Integrações adicionais com CRMs/Helpdesks
+- [ ] Hardening de segurança para ambientes multi-tenant
 
+## Licença
 
-## Deploy with Nitro
+Defina aqui a licença oficial do projeto (ex.: MIT, Apache-2.0, GPL-3.0).
 
-This project uses Nitro as a generic server adapter, so it can run on any Node-compatible host.
+---
 
-```bash
-npm run build
-node dist/server/index.mjs
-```
-
-The build output is a self-contained Node server. To deploy, push the `dist/` directory to your host (Render, Fly.io, your own VPS, etc.) and run the server command above.
-
-For host-specific presets (Vercel, Netlify, Cloudflare, AWS Lambda, etc.) and tuning, see https://v3.nitro.build/deploy.
-
-
-## Setting up Better Auth
-
-1. Generate and set the `BETTER_AUTH_SECRET` environment variable in your `.env.local`:
-
-   ```bash
-   npx -y @better-auth/cli secret
-   ```
-
-2. Visit the [Better Auth documentation](https://www.better-auth.com) to unlock the full potential of authentication in your app.
-
-### Adding a Database (Optional)
-
-Better Auth can work in stateless mode, but to persist user data, add a database:
-
-```typescript
-// src/lib/auth.ts
-import { betterAuth } from "better-auth";
-import { Pool } from "pg";
-
-export const auth = betterAuth({
-  database: new Pool({
-    connectionString: process.env.DATABASE_URL,
-  }),
-  // ... rest of config
-});
-```
-
-Then run migrations:
-
-```bash
-npx -y @better-auth/cli migrate
-```
-
-
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
-# vinaPBX
+Se você quiser, eu também posso preparar uma versão mais curta para perfil comercial e outra mais técnica para contribuidores.
