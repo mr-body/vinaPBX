@@ -16,9 +16,9 @@ export function connectARI() {
             process.env.ARI_PASSWORD!
         ).then((client) => {
             // repassa TODOS os eventos ARI para o emitter interno
-            client.on("*", (event, objects) => {
-                ariEvents.emit("event", { event, objects });
-            });
+            // client.on("*", (event, objects) => {
+            //     ariEvents.emit("event", { event, objects });
+            // });
 
             client.start(APP_NAME);
             console.log(`ARI conectado, app "${APP_NAME}" registrada`);
