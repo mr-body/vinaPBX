@@ -6,9 +6,9 @@ dotenv.config();
 async function seed() {
   console.log("🌱 Iniciando seed do usuário admin...");
 
-  const email = process.env.ADMIN_EMAIL;
-  const name = process.env.ADMIN_NAME;
-  const password = process.env.ADMIN_PASSWORD;
+  const email ="admin@admin.com";
+  const name =  "admin";
+  const password = "admin123";
 
   if (!email || !name || !password) {
     console.error("❌ Missing required environment variables");
