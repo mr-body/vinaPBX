@@ -1,242 +1,267 @@
-Welcome to your new TanStack Start app! 
+# vinaPBX
 
-# Getting Started
+**vinaPBX** é uma plataforma PBX moderna, open source, focada em **observabilidade e gerenciamento de ambientes Asterisk/VoIP**.  
+O projeto fornece uma UI para reduzir a complexidade operacional do dia a dia (a “dor de cabeça” de operar PBX em produção), usando **ARI (Asterisk REST Interface)** como tecnologia principal.
 
-To run this application:
+---
 
+## 🎯 Objetivo do projeto
+
+O vinaPBX foi criado para facilitar:
+
+- administração de ambientes Asterisk;
+- monitoramento de eventos e fluxo de chamadas em tempo real;
+- visão operacional de ramais, filas, IVR e roteamento;
+- centralização da operação VoIP numa interface web moderna.
+
+Em vez de depender apenas de CLI/logs dispersos, a ideia é ter **visibilidade e controle** em uma camada de UI integrada ao ecossistema Asterisk.
+
+---
+
+## 🧱 Arquitetura (visão geral)
+
+A arquitetura atual segue o modelo:
+
+1. **UI Web (React + TanStack Start)**  
+   Camada de apresentação e interação do operador/admin.
+
+2. **Integração com Asterisk via ARI**  
+   Cliente ARI consumindo a API do Asterisk:
+   - `http://localhost:8088/ari`
+
+3. **Persistência local com SQLite (via Prisma)**  
+   Armazena dados operacionais e de aplicação com baixo overhead de infraestrutura.
+
+4. **Camada de autenticação**  
+   Baseada em Better Auth.
+
+---
+
+## 🛠️ Stack técnica
+
+### Linguagens (composição do repositório)
+- **TypeScript** (~93.7%)
+- **CSS** (~3.7%)
+- **MDX** (~2.6%)
+
+### Frameworks e bibliotecas principais
+- **React 19**
+- **TanStack Start** (full-stack React app framework)
+- **TanStack Router** (roteamento baseado em arquivos)
+- **TanStack React Query** (cache/sincronização de dados)
+- **Vite** (build/dev server)
+- **Tailwind CSS v4** (estilização)
+- **Prisma** + **better-sqlite3** + **@prisma/adapter-better-sqlite3** (ORM + SQLite)
+- **ari-client** (integração ARI)
+- **better-auth** (autenticação)
+- **Storybook** (documentação e desenvolvimento de componentes)
+- **Vitest + Testing Library** (testes)
+
+---
+
+## 📦 Dependências relevantes
+
+Dependências chave identificadas no `package.json`:
+
+- `@tanstack/react-start`
+- `@tanstack/react-router`
+- `@tanstack/react-query`
+- `ari-client`
+- `prisma`
+- `@prisma/client`
+- `better-sqlite3`
+- `@prisma/adapter-better-sqlite3`
+- `better-auth`
+- `tailwindcss`
+- `@tailwindcss/vite`
+- `react` / `react-dom`
+- `lucide-react`
+- `class-variance-authority`, `clsx`, `tailwind-merge`
+
+Dev tooling:
+
+- `vitest`
+- `@testing-library/react`
+- `storybook` + addons (`@storybook/addon-docs`, `@storybook/addon-a11y`, etc.)
+- `typescript`
+- `vite`
+
+---
+
+## 📁 Estrutura de pastas (esperada para esta stack)
+
+> A estrutura abaixo documenta o padrão usado por projetos TanStack Start + Prisma e serve como referência arquitetural do vinaPBX.
+
+```text
+vinaPBX/
+├─ src/
+│  ├─ routes/               # Rotas da aplicação (file-based routing)
+│  ├─ components/           # Componentes de UI reutilizáveis
+│  ├─ lib/                  # Utilitários, integrações (ARI, auth, db helpers)
+│  ├─ styles.css            # Estilos globais
+│  └─ ...
+├─ prisma/
+│  ├─ schema.prisma         # Modelagem do banco (SQLite)
+│  └─ migrations/           # Histórico de migrações
+├─ .env.local               # Variáveis locais de ambiente
+├─ package.json             # Scripts e dependências
+├─ vite.config.ts           # Configuração do Vite
+├─ tsconfig.json            # Configuração TypeScript
+└─ README.md
+```
+
+Se quiser, eu posso te entregar uma **segunda versão 100% fiel ao tree real** (pasta por pasta) após mapear todos os diretórios do repo.
+
+---
+
+## ▶️ Como rodar localmente
+
+### Pré-requisitos
+- Node.js (recomendado LTS atual)
+- npm
+- Asterisk com ARI habilitado
+- SQLite (arquivo local, via Prisma)
+
+### Instalação
 ```bash
 npm install
+```
+
+### Desenvolvimento
+```bash
 npm run dev
 ```
 
-# Building For Production
+Aplicação em:
+- `http://localhost:3000`
 
-To build this application for production:
+---
+
+## 🧪 Scripts disponíveis
+
+Com base no projeto atual:
+
+- `npm run dev` — inicia ambiente de desenvolvimento na porta 3000
+- `npm run build` — build de produção
+- `npm run preview` — preview do build
+- `npm run test` — executa testes (Vitest)
+- `npm run storybook` — sobe Storybook
+- `npm run build-storybook` — build do Storybook
+- `npm run generate-routes` — gera rotas (TanStack Router CLI)
+
+Banco de dados (Prisma):
+- `npm run db:generate`
+- `npm run db:push`
+- `npm run db:migrate`
+- `npm run db:studio`
+- `npm run db:seed`
+
+---
+
+## ⚙️ Configuração de ambiente
+
+Crie um arquivo `.env.local` na raiz do projeto.
+
+Exemplo inicial:
+
+```env
+# ARI (Asterisk REST Interface)
+ASTERISK_ARI_URL=http://localhost:8088/ari
+ASTERISK_ARI_USERNAME=seu_usuario_ari
+ASTERISK_ARI_PASSWORD=sua_senha_ari
+
+# Better Auth
+BETTER_AUTH_SECRET=gere_um_secret_forte
+
+# SQLite (exemplo Prisma)
+DATABASE_URL="file:./dev.db"
+```
+
+> Ajuste os nomes conforme as variáveis efetivamente usadas no código.
+
+---
+
+## ☎️ Integração com Asterisk (ARI)
+
+O vinaPBX utiliza ARI como núcleo de integração para observabilidade e controle operacional.
+
+Endpoint padrão informado:
+- `http://localhost:8088/ari`
+
+Para funcionar corretamente, garanta no Asterisk:
+
+- ARI habilitado (`ari.conf`);
+- usuário/senha com permissões corretas;
+- app ARI configurada conforme necessidade do seu fluxo;
+- conectividade entre aplicação e instância Asterisk.
+
+---
+
+## 🔍 Observabilidade VoIP no vinaPBX
+
+O foco principal da plataforma é melhorar a visibilidade do ambiente VoIP:
+
+- eventos de chamadas;
+- estado operacional de recursos;
+- apoio a troubleshooting mais rápido;
+- redução de tempo de diagnóstico em incidentes de telefonia.
+
+---
+
+## 🔐 Autenticação
+
+O projeto usa **Better Auth**.  
+Para gerar segredo:
+
+```bash
+npx -y @better-auth/cli secret
+```
+
+Defina o valor em `.env.local` como `BETTER_AUTH_SECRET`.
+
+---
+
+## 🧪 Qualidade e testes
+
+- **Vitest** para testes automatizados
+- **Testing Library** para testes de componentes/comportamento
+- **Storybook** para documentação visual e desenvolvimento isolado de UI
+
+---
+
+## 🚀 Build e deploy
+
+Build de produção:
 
 ```bash
 npm run build
 ```
 
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+Execução do servidor gerado:
 
 ```bash
-npm run test
-```
-
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `npm install @tailwindcss/vite tailwindcss -D`
-
-
-## Deploy with Nitro
-
-This project uses Nitro as a generic server adapter, so it can run on any Node-compatible host.
-
-```bash
-npm run build
 node dist/server/index.mjs
 ```
 
-The build output is a self-contained Node server. To deploy, push the `dist/` directory to your host (Render, Fly.io, your own VPS, etc.) and run the server command above.
+---
 
-For host-specific presets (Vercel, Netlify, Cloudflare, AWS Lambda, etc.) and tuning, see https://v3.nitro.build/deploy.
+## 🗺️ Roadmap sugerido
 
+- dashboards de métricas em tempo real;
+- correlação de eventos ARI por contexto de chamada;
+- trilha de auditoria operacional;
+- alertas e health checks da stack de telefonia;
+- RBAC/perfis avançados para operação NOC/Suporte.
 
-## Setting up Better Auth
+---
 
-1. Generate and set the `BETTER_AUTH_SECRET` environment variable in your `.env.local`:
+## 🤝 Contribuição
 
-   ```bash
-   npx -y @better-auth/cli secret
-   ```
+Contribuições são bem-vindas via issues e pull requests.  
+Se possível, inclua contexto técnico (cenário Asterisk/ARI, sintomas, logs e reprodução).
 
-2. Visit the [Better Auth documentation](https://www.better-auth.com) to unlock the full potential of authentication in your app.
+---
 
-### Adding a Database (Optional)
+## 📄 Licença
 
-Better Auth can work in stateless mode, but to persist user data, add a database:
-
-```typescript
-// src/lib/auth.ts
-import { betterAuth } from "better-auth";
-import { Pool } from "pg";
-
-export const auth = betterAuth({
-  database: new Pool({
-    connectionString: process.env.DATABASE_URL,
-  }),
-  // ... rest of config
-});
-```
-
-Then run migrations:
-
-```bash
-npx -y @better-auth/cli migrate
-```
-
-
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
-# vinaPBX
+Definir licença do projeto (MIT, Apache-2.0, etc.) se aplicável.

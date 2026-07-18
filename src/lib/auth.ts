@@ -10,5 +10,11 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+
+  trustedOrigins: [
+    "http://212.85.1.223:3001",
+    "http://localhost:3000",
+  ],
+
   plugins: [tanstackStartCookies()],
 })

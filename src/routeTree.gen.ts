@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OkRouteImport } from './routes/ok'
+import { Route as NewContactRouteImport } from './routes/new-contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ConsoleIndexRouteImport } from './routes/console/index'
 import { Route as ConsoleEventsRouteImport } from './routes/console/events'
@@ -20,6 +22,16 @@ import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiEventsRouteImport } from './routes/api/events'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
+const OkRoute = OkRouteImport.update({
+  id: '/ok',
+  path: '/ok',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewContactRoute = NewContactRouteImport.update({
+  id: '/new-contact',
+  path: '/new-contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,6 +85,8 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/new-contact': typeof NewContactRoute
+  '/ok': typeof OkRoute
   '/api/events': typeof ApiEventsRoute
   '/auth/login': typeof AuthLoginRoute
   '/console/asterisk': typeof ConsoleAsteriskRoute
@@ -85,6 +99,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/new-contact': typeof NewContactRoute
+  '/ok': typeof OkRoute
   '/api/events': typeof ApiEventsRoute
   '/auth/login': typeof AuthLoginRoute
   '/console/asterisk': typeof ConsoleAsteriskRoute
@@ -98,6 +114,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/new-contact': typeof NewContactRoute
+  '/ok': typeof OkRoute
   '/api/events': typeof ApiEventsRoute
   '/auth/login': typeof AuthLoginRoute
   '/console/asterisk': typeof ConsoleAsteriskRoute
@@ -112,6 +130,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/new-contact'
+    | '/ok'
     | '/api/events'
     | '/auth/login'
     | '/console/asterisk'
@@ -124,6 +144,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/new-contact'
+    | '/ok'
     | '/api/events'
     | '/auth/login'
     | '/console/asterisk'
@@ -136,6 +158,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/new-contact'
+    | '/ok'
     | '/api/events'
     | '/auth/login'
     | '/console/asterisk'
@@ -149,6 +173,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  NewContactRoute: typeof NewContactRoute
+  OkRoute: typeof OkRoute
   ApiEventsRoute: typeof ApiEventsRoute
   AuthLoginRoute: typeof AuthLoginRoute
   ConsoleAsteriskRoute: typeof ConsoleAsteriskRoute
@@ -162,6 +188,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/ok': {
+      id: '/ok'
+      path: '/ok'
+      fullPath: '/ok'
+      preLoaderRoute: typeof OkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/new-contact': {
+      id: '/new-contact'
+      path: '/new-contact'
+      fullPath: '/new-contact'
+      preLoaderRoute: typeof NewContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -237,6 +277,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  NewContactRoute: NewContactRoute,
+  OkRoute: OkRoute,
   ApiEventsRoute: ApiEventsRoute,
   AuthLoginRoute: AuthLoginRoute,
   ConsoleAsteriskRoute: ConsoleAsteriskRoute,
