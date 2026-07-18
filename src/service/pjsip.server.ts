@@ -2,7 +2,6 @@
 import { mkdir, writeFile, unlink, access } from "node:fs/promises";
 import path from "node:path";
 import { connectARI } from "@/lib/ari.server";
-import { amiAction } from "@/lib/asterisk-manager";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 
@@ -42,7 +41,7 @@ function generatePjsipConfig(username: string, password: string) {
 type=aor
 max_contacts=1
 
-[${username}-auth]
+[${username}]
 type=auth
 auth_type=userpass
 username=${username}
@@ -53,7 +52,7 @@ type=endpoint
 context=from-internal
 disallow=all
 allow=ulaw
-auth=${username}-auth
+auth=${username}
 aors=${username}
 `;
 }
