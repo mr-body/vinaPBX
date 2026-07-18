@@ -1,4 +1,4 @@
-// lib/ari.server.ts
+// src/lib/ari.server.ts
 import AriClient from "ari-client";
 import { EventEmitter } from "node:events";
 
@@ -15,11 +15,6 @@ export function connectARI() {
             process.env.ARI_USER!,
             process.env.ARI_PASSWORD!
         ).then((client) => {
-            // repassa TODOS os eventos ARI para o emitter interno
-            // client.on("*", (event, objects) => {
-            //     ariEvents.emit("event", { event, objects });
-            // });
-
             client.start(APP_NAME);
             console.log(`ARI conectado, app "${APP_NAME}" registrada`);
             return client;

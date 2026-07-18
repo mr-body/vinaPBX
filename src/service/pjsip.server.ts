@@ -3,6 +3,8 @@ import { mkdir, writeFile, unlink, access } from "node:fs/promises";
 import path from "node:path";
 import { connectARI } from "@/lib/ari.server";
 import { amiAction } from "@/lib/asterisk-manager";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 
 const contactsPath = path.resolve(process.cwd(), "../config/pjsip.d");
 const SAFE_NAME = /^[a-zA-Z0-9_.-]{1,64}$/;
@@ -56,9 +58,21 @@ aors=${username}
 `;
 }
 
+
 // Funções utilitárias puras de servidor que serão chamadas pelas Server Functions
 export async function srvReloadPjsip() {
-    await amiAction({ action: "Command", command: "pjsip reload" });
+    // await amiAction({ action: "Command", command: "pjsip reload" });.
+
+    const execAsync = promisify(exec);
+    const { stdout, stderr } = await execAsync(
+        'docker exec asterisk asterisk -rx "pjsip reload"'
+    );
+
+    if (stderr) {
+        console.warn(stderr);
+    }
+
+    return stdout;
 }
 
 export async function srvListContacts() {
